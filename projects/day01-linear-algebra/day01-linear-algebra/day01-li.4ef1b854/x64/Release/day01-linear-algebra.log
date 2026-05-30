@@ -1,0 +1,8 @@
+﻿  main.cpp
+  mat2.cpp
+  vec2.cpp
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 24 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  day01-linear-algebra.vcxproj -> I:\mech-eng-lab\project\day01-linear-algebra\x64\Release\day01-linear-algebra.exe
