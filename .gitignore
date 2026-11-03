@@ -1,0 +1,30 @@
+# Visual Studio and generated build directories.
+.vs/
+build/
+cmake-build-*/
+x64/
+Debug/
+Release/
+*.vcxproj.user
+*.suo
+# CMake generated state.
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+# Compiled outputs.
+*.exe
+*.obj
+*.o
+*.pdb
+*.idb
+*.ilk
+*.iobj
+*.ipdb
+*.tlog/
+# Interpreter and OS caches.
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
