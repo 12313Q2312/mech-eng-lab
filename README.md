@@ -16,6 +16,8 @@
 |---|---|---|
 | 二维线性代数 | 用 `Vec2`、`Mat2` 表达向量运算、旋转与矩阵复合 | [源码与 VS 工程](projects/day01-linear-algebra/day01-linear-algebra/)；已有数值输出核对 |
 | Hello Engine World | 建立最小 C++17 / CMake 构建闭环 | [实验源码](<projects/hello world/day01-hello-world/>)；已有干净构建与运行记录 |
+| 单摆仿真 | 比较两个步长下的能量漂移 | [实现与实测](projects/pendulum/README.md) |
+| 抽题覆盖率 | 比较两种抽样策略的覆盖与重复 | [脚本与 30 种子结果](projects/question-sampling/README.md) |
 | 拉格朗日力学推导 | 保存物理理解与手写推导的上下文 | [推导图片](docs/physics/day-01/) |
 | 工具链复盘 | 记录编译器、生成器、终端与 Git 的实际问题 | [Day 01 日志](docs/log/day-01.md)、[原始截图](docs/screenshots/) |
 
