@@ -8,7 +8,7 @@
 
 从[工程作品索引](docs/portfolio/README.md)查看单片机、机器人状态模拟和本仓库的坐标系实验。索引把每个项目的问题、关键判断、运行证据与验证范围放在一起。
 
-新知识点用[项目卡](docs/portfolio/PROJECT-CARD.md)记录预测、实现和验证。第一份示例是[平面坐标系与位姿变换](projects/planar-frames/README.md)，用一个可手算的反例检查旋转和平移的顺序。
+新知识点用[项目卡](docs/portfolio/PROJECT-CARD.md)记录预测、实现和验证。第一份示例是[平面坐标系与位姿变换](projects/planar-frames/README.md)，用一个可手算的反例检查旋转和平移的顺序。接着把同一套变换用于[二连杆机械臂](projects/two-link-arm/README.md)，从关节角计算末端位置。
 
 ## 实验地图
 

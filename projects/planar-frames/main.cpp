@@ -1,22 +1,7 @@
-#include "mat2.h"
-#include "vec2.h"
+#include "pose2.h"
 
 #include <cmath>
 #include <iostream>
-
-struct Pose2 {
-    Vec2 origin;
-    float angleDegrees;
-
-    Vec2 localToWorld(const Vec2& point) const {
-        return Mat2::rotation(angleDegrees).transform(point).add(origin);
-    }
-
-    Vec2 worldToLocal(const Vec2& point) const {
-        const Vec2 offset(point.x - origin.x, point.y - origin.y);
-        return Mat2::rotation(-angleDegrees).transform(offset);
-    }
-};
 
 bool check(const char* name, const Vec2& actual, const Vec2& expected) {
     constexpr float tolerance = 1e-5f;
