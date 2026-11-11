@@ -6,12 +6,17 @@
 
 | 作品 | 核心问题 | 可查看的证据 | 验证范围 |
 |---|---|---|---|
-| 中文指令控制 51 点阵 | 怎样把自然语言变成可预览、可验证的设备指令？ | [方案与实现](https://github.com/12313Q2312/51-MCU-Machine-Operation-Simulation/pull/5) · [三平台构建和离线演示](https://github.com/12313Q2312/51-MCU-Machine-Operation-Simulation/actions/runs/41756211229) | 软件原型。真实 AI 调用、烧录和开发板联调待验收 |
+| 中文指令控制 51 点阵 | 怎样把自然语言变成可预览、可验证的设备指令？ | [方案与实现](https://github.com/12313Q2312/51-MCU-Machine-Operation-Simulation#运行演示) · [三平台构建和离线演示](https://github.com/12313Q2312/51-MCU-Machine-Operation-Simulation/actions/runs/43027157528) | 软件原型。真实 AI 调用、烧录和开发板联调待验收 |
 | 平面坐标系实验 | 为什么旋转和平移调换顺序后，机械末端会落在不同位置？ | [推导、源码与复现命令](../../projects/planar-frames/README.md) | C++17 数值实验。检查局部与世界坐标、逆变换和复合顺序 |
 | 二连杆机械臂 | 怎样把两个关节角转换成世界坐标下的末端位置？ | [五组手算与可运行程序](../../projects/two-link-arm/README.md) | C++17 正运动学实验，支持输入两个关节角 |
 | 单摆数值仿真 | 步长如何影响理想单摆的能量漂移？ | [推导、命令与结果](../../projects/pendulum/README.md) | 两种步长下的显式欧拉对照 |
 | 抽题覆盖率实验 | 连续练习时，怎样增加题库覆盖、减少相邻卷重复？ | [30 个固定种子的对照结果](../../projects/question-sampling/README.md) | 人工题库下比较独立抽样与曝光均衡 |
 | 机器人状态模拟 | 怎样用组合式组件描述动作、位置、朝向和轨迹？ | [源码仓库](https://github.com/12313Q2312/cpp_robot_review_01) · [示例动作与审阅说明](https://github.com/12313Q2312/cpp_robot_review_01/pull/1) | 离散状态模拟。物理运动学与真实电机尚未接入 |
+
+| 单膝关节助力仿真 | 怎样用同一个执行器力矩上限约束不同控制入口？ | [项目说明](https://github.com/12313Q2312/AI-Robotic-Joint-Mini) · [C++ 限幅测试](https://github.com/12313Q2312/AI-Robotic-Joint-Mini/actions/runs/42768129883) | 合成意图与软件测试，真人与硬件待验证 |
+| AutoCAD 尺寸标注 | 怎样把图纸选择、标注规则和结果导出串起来？ | [源码和本机启动方法](https://github.com/12313Q2312/AutoCAD-Automatic-dimensioning) | 首页、资源和样式预设已检查，真实 DWG 待验收 |
+| NPLAM 模型复现 | 如何用门控判断特征是否有效、是否需要非线性项？ | [运行说明和实验报告](https://github.com/12313Q2312/NPLAM) | 独立 PyTorch 实现，记录 232 次评估和复现边界 |
+| DR-ISR 符号回归 | 残差引导能否在固定预算下改善表达式搜索？ | [对照实验与可复现结果](https://github.com/12313Q2312/DR-ISR) | 保留全部种子，按任务和噪声水平报告结果 |
 
 ## 从项目里提炼的判断
 
@@ -19,7 +24,7 @@
 
 **让数学错误在接口上显形。** 坐标系实验把“旋转后平移”和“平移后旋转”写成两个可运行的案例。两条路径分别得到 (2,2) 和 (−1,3)，一个具体反例就能揭示顺序写反的问题。接口明确写出 localToWorld 和 worldToLocal，也减少了调用方对坐标含义的猜测。
 
-**按入口是否可用来报告进度。** C 语言与 AI 习题网页的 master 线曾卡在登录入口，因为按钮调用了未定义的函数。修复草稿通过模拟 DOM 检查，从表单提交走到抽题、倒计时、交卷与计分。真实浏览器交互与全题库正确性待验收。[入口修复与证据](https://github.com/12313Q2312/c-exam-system/pull/3) · [main 审阅](https://github.com/12313Q2312/c-exam-system/pull/2)
+**按入口是否可用来报告进度。** C 语言与 AI 习题网页的 master 线曾卡在登录入口，因为按钮调用了未定义的函数。已合入 `master` 的修复通过模拟 DOM 检查，从表单提交走到抽题、倒计时、交卷与计分。真实浏览器交互与全题库正确性待验收。[入口修复与证据](https://github.com/12313Q2312/c-exam-system/pull/3) · [main 审阅](https://github.com/12313Q2312/c-exam-system/pull/2)
 
 ## 从知识点到下一个项目
 
