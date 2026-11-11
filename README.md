@@ -4,11 +4,16 @@
 
 本仓库记录机械工程相关的计算与编程实验：从最小构建环境，到二维向量、矩阵和旋转，再到物理推导与实验复盘。每个实验保留实现和原始资料，便于复现、比较与后续扩展。
 
-## 工程作品与思考
+## 选一个实验复现
 
-从[工程作品索引](docs/portfolio/README.md)查看单片机、机器人状态模拟和本仓库的坐标系实验。索引把每个项目的问题、关键判断、运行证据与验证范围放在一起。
+| 实验 | 跑完可以核对什么 |
+|---|---|
+| [平面坐标变换](projects/planar-frames/README.md) | 调换旋转和平移的次序，端点从 `(2,2)` 变到 `(-1,3)` |
+| [二连杆正运动学](projects/two-link-arm/README.md) | 用肩角和肘角计算肘点与末端位置，并和五个手算样例对照 |
+| [单摆能量漂移](projects/pendulum/README.md) | 在同一模型中比较 20 ms 和 5 ms 步长的显式欧拉误差 |
+| [抽题策略对照](projects/question-sampling/README.md) | 用 30 个固定种子比较覆盖率、相邻卷重复和曝光极差 |
 
-新知识点用[项目卡](docs/portfolio/PROJECT-CARD.md)记录预测、实现和验证。第一份示例是[平面坐标系与位姿变换](projects/planar-frames/README.md)，用一个可手算的反例检查旋转和平移的顺序。接着把同一套变换用于[二连杆机械臂](projects/two-link-arm/README.md)，从关节角计算末端位置。
+[工程作品索引](docs/portfolio/README.md)还收录了单片机、机器人关节、CAD 和机器学习项目的运行入口与验证记录。[可复用项目卡](docs/portfolio/PROJECT-CARD.md)用于记录自己的预测、实现和结果。
 
 ## 实验地图
 
