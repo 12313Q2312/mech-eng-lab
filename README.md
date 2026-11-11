@@ -4,12 +4,20 @@
 
 本仓库记录机械工程相关的计算与编程实验：从最小构建环境，到二维向量、矩阵和旋转，再到物理推导与实验复盘。每个实验保留实现和原始资料，便于复现、比较与后续扩展。
 
+## 工程作品与思考
+
+从[工程作品索引](docs/portfolio/README.md)查看单片机、机器人状态模拟和本仓库的坐标系实验。索引把每个项目的问题、关键判断、运行证据与验证范围放在一起。
+
+新知识点用[项目卡](docs/portfolio/PROJECT-CARD.md)记录预测、实现和验证。第一份示例是[平面坐标系与位姿变换](projects/planar-frames/README.md)，用一个可手算的反例检查旋转和平移的顺序。接着把同一套变换用于[二连杆机械臂](projects/two-link-arm/README.md)，从关节角计算末端位置。
+
 ## 实验地图
 
 | 实验 / 资料 | 要解决的问题 | 入口与已有证据 |
 |---|---|---|
 | 二维线性代数 | 用 `Vec2`、`Mat2` 表达向量运算、旋转与矩阵复合 | [源码与 VS 工程](projects/day01-linear-algebra/day01-linear-algebra/)；已有数值输出核对 |
 | Hello Engine World | 建立最小 C++17 / CMake 构建闭环 | [实验源码](<projects/hello world/day01-hello-world/>)；已有干净构建与运行记录 |
+| 单摆仿真 | 比较两个步长下的能量漂移 | [实现与实测](projects/pendulum/README.md) |
+| 抽题覆盖率 | 比较两种抽样策略的覆盖与重复 | [脚本与 30 种子结果](projects/question-sampling/README.md) |
 | 拉格朗日力学推导 | 保存物理理解与手写推导的上下文 | [推导图片](docs/physics/day-01/) |
 | 工具链复盘 | 记录编译器、生成器、终端与 Git 的实际问题 | [Day 01 日志](docs/log/day-01.md)、[原始截图](docs/screenshots/) |
 
