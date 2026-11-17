@@ -7,7 +7,7 @@ APPLY=0
 
 usage() {
   cat <<'EOF'
-ResearchOS installer (Ubuntu 24.04 LTS, x86_64 / aarch64)
+ResearchOS installer (Ubuntu 24.04 / 26.04 LTS, x86_64 / aarch64)
 Usage: bash scripts/install.sh [--profile core|ai|robotics] [--apply]
 Default is PREVIEW ONLY. --apply installs APT packages and the user-level CLI.
 This script does NOT partition disks, install bootloaders, remove software or configure CUDA.
@@ -48,7 +48,7 @@ Packages: ${PACKAGES[*]}
 CLI: ~/.local/bin/researchos
 EOF
 if [[ "$PROFILE" == robotics ]]; then
-  echo 'NOTE: ROS 2 Jazzy is NOT auto-installed. Follow the official ROS 2 Ubuntu instructions after this step.'
+  echo 'NOTE: ROS 2 is NOT auto-installed. Ubuntu 24.04 uses Jazzy; Ubuntu 26.04 uses Lyrical.'
 fi
 if [[ "$APPLY" -eq 0 ]]; then
   echo 'No changes made. Review the package list, then rerun with --apply.'
@@ -58,8 +58,8 @@ fi
 if [[ ! -r /etc/os-release ]]; then echo 'Cannot identify OS' >&2; exit 1; fi
 # shellcheck disable=SC1091
 source /etc/os-release
-if [[ "${ID:-}" != ubuntu || "${VERSION_ID:-}" != '24.04' ]]; then
-  echo "Only Ubuntu 24.04 LTS is supported (detected ${ID:-?} ${VERSION_ID:-?})." >&2
+if [[ "${ID:-}" != ubuntu || ( "${VERSION_ID:-}" != '24.04' && "${VERSION_ID:-}" != '26.04' ) ]]; then
+  echo "Only Ubuntu 24.04 / 26.04 LTS are supported (detected ${ID:-?} ${VERSION_ID:-?})." >&2
   exit 1
 fi
 case "$(uname -m)" in x86_64|aarch64) ;; *) echo 'Unsupported architecture' >&2; exit 1 ;; esac

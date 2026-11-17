@@ -1,4 +1,4 @@
-# Ubuntu 24.04 standard repositories
+# Ubuntu 24.04 / 26.04 LTS standard repositories
 build-essential
 ca-certificates
 cmake

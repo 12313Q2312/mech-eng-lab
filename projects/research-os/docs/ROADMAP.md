@@ -16,12 +16,12 @@
 - Interactive, non-destructive Windows-to-Linux migration planner
 - Signed packages, dependency version checks, rollback notes
 
-**Acceptance:** 2 clean Ubuntu 24.04 installations reproduce the same profile; independent user completes setup without developer assistance.
+**Acceptance:** 2 clean Ubuntu 26.04 installations reproduce the same profile; independent user completes setup without developer assistance.
 
 ## V0.3 · Research profiles
 
 - AI profile with reproducible venvs and CPU/GPU-specific checks
-- Official ROS 2 Jazzy setup automation with signed-source verification
+- Official ROS 2 Lyrical (Ubuntu 26.04) / Jazzy (Ubuntu 24.04) setup automation with signed-source verification
 - C++ / CMake presets; test reports; experiment comparison
 
 **Acceptance:** a KAN project and a ROS 2 demonstration run with documented dependency manifests on tested hardware.

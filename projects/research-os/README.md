@@ -19,7 +19,7 @@ ResearchOS 希望让科研人员更快构建工作环境、可靠复现实验、
 
 ## Quick start / 快速开始
 
-On an **already installed Ubuntu 24.04 LTS Desktop** machine:
+On an **already installed Ubuntu 26.04 LTS Desktop** machine (Ubuntu 24.04 LTS also supported):
 
 ```bash
 # Clone the ResearchOS source repository or extract the release ZIP.
@@ -42,7 +42,7 @@ python3 bin/researchos run hello_lab -- python3 experiments/hello.py
 
 Set `--timeout` before `PROJECT` if needed: `researchos run --timeout 60 PROJECT -- command`.
 
-The `run` command saves reports in `PROJECT/runs/`, ignored by Git by default. Do not put passwords/API keys in command arguments or logs. The installer only accepts Ubuntu 24.04 for `--apply`; preview and CLI can run elsewhere for evaluation.
+The `run` command saves reports in `PROJECT/runs/`, ignored by Git by default. Do not put passwords/API keys in command arguments or logs. The installer accepts Ubuntu 24.04 and 26.04 for `--apply`; preview and CLI can run elsewhere for evaluation. The robotics profile does **not** install ROS 2 automatically: use Jazzy on 24.04, Lyrical on 26.04. Compatibility with GPU drivers and third-party robotics components depends on tested hardware.
 
 > **Safety / 安全**: This installer never selects partitions, formats disks, touches EFI/bootloader, removes packages, or changes Windows. It is not an OS installer. See [external-drive installation](docs/INSTALL-EXTERNAL-DRIVE.md) for manual precautions. Never run unreviewed scripts with `sudo`.
 

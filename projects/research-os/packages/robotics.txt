@@ -1,2 +1,2 @@
-# Robotics profile prepares basic tooling only; ROS 2 Jazzy requires official ROS repository setup.
+# Robotics profile provides base tooling only; install ROS 2 Jazzy (24.04) or Lyrical (26.04) from official sources.
 python3-dev

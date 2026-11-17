@@ -1,7 +1,7 @@
 # Architecture / 系统架构
 
 ```
-Ubuntu 24.04 LTS (standard installer and kernel)
+Ubuntu 26.04 / 24.04 LTS (standard installer and kernel)
   ├─ GNOME Desktop (upstream)
   ├─ ResearchOS profile installer (preview/apply)
   │     ├─ core: C/C++, Python, Git, utilities
