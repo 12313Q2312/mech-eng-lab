@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""ResearchOS: small, auditable research workstation toolkit (stdlib only)."""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+import platform
+from pathlib import Path
+import re
+import subprocess
+import sys
+import time
+import uuid
+
+VERSION = '0.1.0'
+
+
+def machine_info():
+    """Return a minimal system snapshot; intentionally omit user and host identity."""
+    release = 'unknown'
+    try:
+        for line in Path('/etc/os-release').read_text(encoding='utf-8').splitlines():
+            if line.startswith('PRETTY_NAME='):
+                release = line.split('=', 1)[1].strip().strip('"')
+                break
+    except OSError:
+        pass
+    mem_kib = None
+    try:
+        m = re.search(r'^MemTotal:\s+(\d+)\s+kB$', Path('/proc/meminfo').read_text(), re.M)
+        if m:
+            mem_kib = int(m.group(1))
+    except OSError:
+        pass
+    kernel = platform.release()
+    return {
+        'distribution': release,
+        'kernel': kernel,
+        'architecture': platform.machine(),
+        'python': platform.python_version(),
+        'logical_cpu_count': os.cpu_count(),
+        'memory_total_mib': round(mem_kib / 1024) if mem_kib else None,
+        'wsl_detected': 'microsoft' in kernel.lower() or 'wsl' in kernel.lower(),
+    }
+
+
+def doctor(args):
+    info = {'researchos_version': VERSION, **machine_info()}
+    if args.json:
+        print(json.dumps(info, ensure_ascii=False, indent=2))
+    else:
+        print('ResearchOS system check / 系统检查')
+        for k, v in info.items():
+            print(f'  {k:20} {v}')
+    return 0
+
+
+def init_project(args):
+    name = args.name
+    if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]{0,63}', name):
+        print('Error: project name must start with a letter and contain only letters, numbers, _ or -', file=sys.stderr)
+        return 2
+    project = Path(args.parent).expanduser().resolve() / name
+    if project.exists():
+        print(f'Error: already exists: {project}', file=sys.stderr)
+        return 2
+    project.mkdir(parents=True)
+    (project / 'experiments').mkdir()
+    (project / 'runs').mkdir()
+    (project / '.gitignore').write_text('runs/\n.venv/\n__pycache__/\n*.pyc\n', encoding='utf-8')
+    (project / 'requirements.txt').write_text('# Pin dependencies here, e.g. numpy==2.x.y\n', encoding='utf-8')
+    (project / 'README.md').write_text(f'# {name}\n\nResearch project created with ResearchOS {VERSION}.\n\nRun:\n\n```bash\nresearchos run . -- python3 experiments/hello.py\n```\n\nLogs in `runs/` are local and excluded from Git.\n', encoding='utf-8')
+    (project / 'experiments' / 'hello.py').write_text('print("Hello from ResearchOS research experiment")\n', encoding='utf-8')
+    (project / 'researchos-project.json').write_text(json.dumps({'schema_version': 1, 'name': name, 'created_by': 'ResearchOS', 'researchos_version': VERSION}, indent=2) + '\n', encoding='utf-8')
+    print(f'Created: {project}')
+    print(f'Next: cd "{project}" && researchos run . -- python3 experiments/hello.py')
+    return 0
+
+
+def git_commit(path):
+    try:
+        p = subprocess.run(['git', '-C', str(path), 'rev-parse', '--verify', 'HEAD'], capture_output=True, text=True, timeout=3, check=False)
+        return p.stdout.strip() if p.returncode == 0 else None
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+
+def run_experiment(args):
+    project = Path(args.project).expanduser().resolve()
+    if not project.is_dir():
+        print('Error: project directory does not exist', file=sys.stderr)
+        return 2
+    command = args.command[1:] if args.command[:1] == ['--'] else args.command
+    if not command:
+        print('Error: usage: researchos run PROJECT -- command arg1 ...', file=sys.stderr)
+        return 2
+    runs = project / 'runs'
+    runs.mkdir(exist_ok=True)
+    run_id = dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-' + uuid.uuid4().hex[:8]
+    started = dt.datetime.now(dt.timezone.utc).isoformat()
+    start_clock = time.monotonic()
+    status = 'completed'
+    try:
+        p = subprocess.run(command, cwd=project, capture_output=True, text=True, errors='replace', timeout=args.timeout, shell=False)
+        code, stdout, stderr = p.returncode, p.stdout, p.stderr
+    except subprocess.TimeoutExpired as exc:
+        status, code = 'timeout', 124
+        stdout = (exc.stdout or b'').decode('utf-8', errors='replace') if isinstance(exc.stdout, bytes) else (exc.stdout or '')
+        stderr = (exc.stderr or b'').decode('utf-8', errors='replace') if isinstance(exc.stderr, bytes) else (exc.stderr or '')
+    except OSError as exc:
+        status, code, stdout, stderr = 'launch_error', 127, '', str(exc)
+    elapsed = round(time.monotonic() - start_clock, 6)
+    record = {
+        'schema_version': 1, 'run_id': run_id, 'started_utc': started,
+        'command': command, 'working_directory': '.', 'exit_code': code, 'status': status,
+        'elapsed_seconds': elapsed, 'git_commit': git_commit(project),
+        'environment': machine_info(),
+        'stdout_file': f'{run_id}.stdout.log', 'stderr_file': f'{run_id}.stderr.log',
+    }
+    (runs / record['stdout_file']).write_text(stdout, encoding='utf-8')
+    (runs / record['stderr_file']).write_text(stderr, encoding='utf-8')
+    (runs / (run_id + '.json')).write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print(f'Run: {run_id}\nExit: {code} ({status}) | elapsed: {elapsed:.3f}s\nReport: {runs / (run_id + ".json")}')
+    if stdout:
+        print(stdout, end='' if stdout.endswith('\n') else '\n')
+    if stderr:
+        print(stderr, file=sys.stderr, end='' if stderr.endswith('\n') else '\n')
+    return code if 0 <= code <= 255 else 1
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(prog='researchos', description='ResearchOS: reproducible engineering workstations')
+    p.add_argument('--version', action='version', version=VERSION)
+    sub = p.add_subparsers(dest='subcommand', required=True)
+    d = sub.add_parser('doctor', help='Show a minimal, privacy-conscious system inventory')
+    d.add_argument('--json', action='store_true')
+    d.set_defaults(func=doctor)
+    i = sub.add_parser('init', help='Create a self-contained research project')
+    i.add_argument('name')
+    i.add_argument('--parent', default='.')
+    i.set_defaults(func=init_project)
+    r = sub.add_parser('run', help='Run a command and save reproducibility evidence')
+    r.add_argument('project')
+    r.add_argument('--timeout', type=float, default=600, help='Timeout in seconds (default: 600)')
+    r.add_argument('command', nargs=argparse.REMAINDER)
+    r.set_defaults(func=run_experiment)
+    args = p.parse_args(argv)
+    if getattr(args, 'timeout', 1) is not None and getattr(args, 'timeout', 1) <= 0:
+        p.error('--timeout must be > 0')
+    return args.func(args)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
