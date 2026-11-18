@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+build/
+dist/
+*.egg-info/
+runs/
+*.iso
+*.img
+*.qcow2
+.env
+.secrets*

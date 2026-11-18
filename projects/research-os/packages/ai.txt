@@ -1,0 +1,2 @@
+# AI research prerequisites. Actual PyTorch/CUDA installed separately per hardware.
+python3-dev

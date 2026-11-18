@@ -1,0 +1,14 @@
+# Ubuntu 24.04 / 26.04 LTS standard repositories
+build-essential
+ca-certificates
+cmake
+curl
+git
+htop
+jq
+ninja-build
+pkg-config
+python3
+python3-pip
+python3-venv
+ripgrep

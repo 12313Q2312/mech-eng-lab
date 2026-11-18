@@ -1,0 +1,17 @@
+name: ResearchOS CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: bash -n scripts/install.sh
+      - name: Installer preview (never modifies runner)
+        run: bash scripts/install.sh --profile ai
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
