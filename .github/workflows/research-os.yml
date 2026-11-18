@@ -1,0 +1,60 @@
+# ResearchOS smoke checks for the copy that lives in this monorepo.
+# GitHub only loads workflows from the repository-root .github/workflows directory.
+# The file at projects/research-os/.github/workflows/ci.yml is not executed.
+name: ResearchOS
+
+on:
+  push:
+    paths:
+      - 'projects/research-os/**'
+  pull_request:
+    paths:
+      - 'projects/research-os/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: preview, shellcheck, unit tests
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: projects/research-os
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Bash syntax
+        run: bash -n scripts/install.sh
+
+      - name: ShellCheck
+        run: |
+          set -euo pipefail
+          if ! command -v shellcheck >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y shellcheck
+          fi
+          shellcheck --version
+          shellcheck scripts/install.sh
+
+      - name: Installer preview only
+        run: |
+          set -euo pipefail
+          for profile in core ai robotics; do
+            echo "----- preview profile: ${profile} -----"
+            output="$(bash scripts/install.sh --profile "${profile}")"
+            printf '%s\n' "${output}"
+            printf '%s\n' "${output}" | grep -F 'Mode: PREVIEW' >/dev/null
+            printf '%s\n' "${output}" | grep -F 'No changes made.' >/dev/null
+            if printf '%s\n' "${output}" | grep -F 'Mode: APPLY' >/dev/null; then
+              echo 'Installer preview reported APPLY. Refusing to continue.' >&2
+              exit 1
+            fi
+          done
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
